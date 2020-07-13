@@ -1,5 +1,7 @@
 const color = {
   purple: '#663399',
+  purpleLight: '#B894DB',
+  purpleDark: '#47246B',
   greyLight: '#e8e8e8',
   greyMedium: '#c5c5c5',
   greyDark: '#808080',

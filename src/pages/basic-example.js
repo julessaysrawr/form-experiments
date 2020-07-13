@@ -5,13 +5,14 @@ import theme from "../theme"
 
 export default function BasicExample() {
   const [name, setName] = useState("")
+  const [age, SetAge] = useState(50)
   // how to get an object of state?
   const [results, setResults] = useState("")
   const [shirt, setShirt] = useState(false)
   const [pants, setPants] = useState(false)
   const [shoes, setShoes] = useState(false)
   const [shipping, setShipping] = useState("")
-  const [packaging, setPackaging] = useState("")
+  const [packaging, setPackaging] = useState("paper")
 
   const handleSubmit = event => {
     event.preventDefault()
@@ -36,6 +37,7 @@ export default function BasicExample() {
           css={css`
             display: flex;
             flex-direction: column;
+            margin-bottom: ${theme.space[5]}px;
           `}
         >
           Name
@@ -47,8 +49,101 @@ export default function BasicExample() {
             css={css`
               width: ${theme.space[7]}px;
             `}
+            required
           />
         </label>
+        {/* range input styleing from https://css-tricks.com/value-bubbles-for-range-inputs/ */}
+        <label htmlFor="age">
+          Age
+          <input
+            type="range"
+            min="0"
+            max="120"
+            value={age}
+            id="age"
+            onChange={event => SetAge(event.target.value)}
+            css={css`
+              cursor: pointer;
+              width: 200px;
+              height: 10px;
+              background: ${theme.color.greyMedium};
+              border-radius: 5px;
+              appearance: none;
+              outline: none;
+              margin: 0 10px;
+              padding: 0;
+
+              &::-webkit-slider-thumb {
+                -webkit-appearance: none;
+                width: 20px;
+                height: 20px;
+                background: ${theme.color.purpleLight};
+                border-radius: 50%;
+                transition: background 0.15s ease-in-out;
+
+                &:hover {
+                  background: ${theme.color.purpleDark};
+                }
+              }
+              &:active::-webkit-slider-thumb {
+                background: ${theme.color.purpleDark};
+              }
+              &::-moz-range-thumb {
+                width: 20px;
+                height: 20px;
+                border: 0;
+                background: ${theme.color.purpleLight};
+                border-radius: 50%;
+                transition: background 0.15s ease-in-out;
+
+                &:hover {
+                  background: ${theme.color.purpleDark};
+                }
+              }
+              &:active::-moz-range-thumb {
+                background: ${theme.color.purpleDark};
+              }
+
+              // Firefox Overrides
+              &::-moz-range-track {
+                background: $range-track-color;
+                border: 0;
+              }
+              ::-moz-focus-inner,
+              ::-moz-focus-outer {
+                border: 0;
+              }
+            `}
+          ></input>
+          <span
+            css={css`
+              display: inline-block;
+              position: relative;
+              text-align: center;
+              background-color: ${theme.color.purple};
+              color: ${theme.color.white};
+              line-height: 20px;
+              padding: 5px 10px;
+              border-radius: 3px;
+              margin-left: ${theme.space[1]}px;
+
+              &:after {
+                position: absolute;
+                top: 8px;
+                left: -7px;
+                width: 0;
+                height: 0;
+                border-top: 7px solid transparent;
+                border-right: 7px solid ${theme.color.purple};
+                border-bottom: 7px solid transparent;
+                content: "";
+              }
+            `}
+          >
+            {age}
+          </span>
+        </label>
+        {/* Value: {age} */}
         <div
           css={css`
             margin: ${theme.space[4]}px 0;
@@ -137,7 +232,12 @@ export default function BasicExample() {
               Ground
             </label>
           </fieldset>
-          <label htmlFor="packaging">
+          <label
+            htmlFor="packaging"
+            css={css`
+              margin-bottom: ${theme.space[5]}px;
+            `}
+          >
             What type of packaging do your prefer:
             <select
               id="packaging"
@@ -151,7 +251,6 @@ export default function BasicExample() {
             </select>
           </label>
         </div>
-
         <input
           type="submit"
           value="Submit 🚀"
@@ -177,6 +276,7 @@ export default function BasicExample() {
         >
           {/* {results} */}
           <p>name: {name}</p>
+          <p>Age: {age}</p>
           <p>shirt: {shirt.toString()}</p>
           <p>pants: {pants.toString()}</p>
           <p>shoes: {shoes.toString()}</p>
