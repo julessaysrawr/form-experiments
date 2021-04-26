@@ -1,16 +1,26 @@
 import React, { useState } from "react"
-import { css } from "@emotion/core"
 import { Link } from "gatsby"
+import { css } from "@emotion/core"
 import theme from "../theme"
 
-export default function BasicExample() {
-  const [name, setName] = useState("")
-  const [age, SetAge] = useState(50)
-  const [shirt, setShirt] = useState(false)
-  const [pants, setPants] = useState(false)
-  const [shoes, setShoes] = useState(false)
-  const [shipping, setShipping] = useState("")
-  const [packaging, setPackaging] = useState("paper")
+const ReusableHandler = () => {
+  // const [name, setName] = useState("")
+  // const [age, SetAge] = useState(50)
+  // const [shirt, setShirt] = useState(false)
+  // const [pants, setPants] = useState(false)
+  // const [shoes, setShoes] = useState(false)
+  // const [shipping, setShipping] = useState("")
+  // const [packaging, setPackaging] = useState("paper")
+
+  const [form, setState] = useState({
+    name: "",
+    age: 0,
+    shirt: false,
+    pants: false,
+    shoes: false,
+    shipping: '',
+    packaging: "paper"
+  })
 
   const handleSubmit = event => {
     event.preventDefault()
@@ -18,15 +28,22 @@ export default function BasicExample() {
     // setResults(option2)
   }
 
+  const handleChange = event => {
+    setState({
+      ...form,
+      [event.target.name]: (event.target.type === "checkbox" ? event.target.checked : event.target.value)
+    })
+  }
+
   return (
     <div>
       <h1>Basic Form</h1>
       <form
         css={css`
-          display: flex;
-          flex-direction: column;
-          // background-color: ${theme.color.purple};
-        `}
+        display: flex;
+        flex-direction: column;
+        // background-color: ${theme.color.purple};
+      `}
         onSubmit={handleSubmit}
       >
         <label
@@ -41,8 +58,9 @@ export default function BasicExample() {
           <input
             type="text"
             id="name"
-            value={name}
-            onChange={event => setName(event.target.value)}
+            name="name"
+            value={form.name}
+            onChange={handleChange}
             css={css`
               width: ${theme.space[7]}px;
             `}
@@ -56,9 +74,10 @@ export default function BasicExample() {
             type="range"
             min="0"
             max="120"
-            value={age}
+            value={form.age}
             id="age"
-            onChange={event => SetAge(event.target.value)}
+            name="age"
+            onChange={handleChange}
             css={css`
               cursor: pointer;
               width: 200px;
@@ -137,20 +156,20 @@ export default function BasicExample() {
               }
             `}
           >
-            {age}
+            {form.age}
           </span>
         </label>
-        {/* Value: {age} */}
+
         <div
           css={css`
-            margin: ${theme.space[4]}px 0;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-around;
-            width: calc(${theme.space[8]}px * 1.5);
-            // width: 300px;
-            // height: calc(${theme.space[6]}px * 1.5);
-          `}
+          margin: ${theme.space[4]}px 0;
+          display: flex;
+          flex-direction: column;
+          justify-content: space-around;
+          width: calc(${theme.space[8]}px * 1.5);
+          // width: 300px;
+          // height: calc(${theme.space[6]}px * 1.5);
+        `}
         >
           <fieldset
             css={css`
@@ -162,9 +181,10 @@ export default function BasicExample() {
               <input
                 type="checkbox"
                 id="shirt"
-                value={shirt}
-                checked={shirt}
-                onChange={event => setShirt(event.target.checked)}
+                name="shirt"
+                value={form.shirt}
+                checked={form.shirt}
+                onChange={handleChange}
               />
               Shirt
             </label>
@@ -172,9 +192,10 @@ export default function BasicExample() {
               <input
                 type="checkbox"
                 id="pants"
-                value={pants}
-                checked={pants}
-                onChange={event => setPants(event.target.checked)}
+                name="pants"
+                value={form.pants}
+                checked={form.pants}
+                onChange={handleChange}
               />
               Pants
             </label>
@@ -182,9 +203,10 @@ export default function BasicExample() {
               <input
                 type="checkbox"
                 id="shoes"
-                value={shoes}
-                checked={shoes}
-                onChange={event => setShoes(event.target.checked)}
+                name="shoes"
+                value={form.shoes}
+                checked={form.shoes}
+                onChange={handleChange}
               />
               Shoes
             </label>
@@ -198,33 +220,33 @@ export default function BasicExample() {
             <label htmlFor="overnight">
               <input
                 type="radio"
-                name="shippiing"
+                name="shipping"
                 id="overnight"
                 value="overnight"
-                checked={shipping === "overnight"}
-                onChange={event => setShipping(event.target.value)}
+                checked={form.shipping === "overnight"}
+                onChange={handleChange}
               ></input>
               Overnight
             </label>
             <label htmlFor="twoday">
               <input
                 type="radio"
-                name="shippiing"
+                name="shipping"
                 id="twoday"
                 value="twoday"
-                checked={shipping === "twoday"}
-                onChange={event => setShipping(event.target.value)}
+                checked={form.shipping === "twoday"}
+                onChange={handleChange}
               ></input>
               Two Day
             </label>
             <label htmlFor="ground">
               <input
                 type="radio"
-                name="shippiing"
+                name="shipping"
                 id="ground"
                 value="ground"
-                checked={shipping === "ground"}
-                onChange={event => setShipping(event.target.value)}
+                checked={form.shipping === "ground"}
+                onChange={handleChange}
               ></input>
               Ground
             </label>
@@ -239,8 +261,8 @@ export default function BasicExample() {
             <select
               id="packaging"
               name="packaging"
-              value={packaging}
-              onChange={event => setPackaging(event.target.value)}
+              value={form.packaging}
+              onChange={handleChange}
             >
               <option value="paper">Paper Only</option>
               <option value="plastic">Plastic Okay (-$1)</option>
@@ -271,16 +293,18 @@ export default function BasicExample() {
             margin-bottom: 50px;
           `}
         >
-          <p>name: {name}</p>
-          <p>Age: {age}</p>
-          <p>shirt: {shirt.toString()}</p>
-          <p>pants: {pants.toString()}</p>
-          <p>shoes: {shoes.toString()}</p>
-          <p>Shipping: {shipping}</p>
-          <p>Packaging: {packaging}</p>
+          <p>name: {form.name}</p>
+          <p>Age: {form.age}</p>
+          <p>shirt: {form.shirt.toString()}</p>
+          <p>pants: {form.pants.toString()}</p>
+          <p>shoes: {form.shoes.toString()}</p>
+          <p>Shipping: {form.shipping}</p>
+          <p>Packaging: {form.packaging}</p>
         </div>
       </div>
       <Link to="/">Back</Link>
     </div>
   )
 }
+
+export default ReusableHandler
